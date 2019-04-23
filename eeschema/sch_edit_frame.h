@@ -260,8 +260,6 @@ public:
      */
     void OnUnfoldBus( wxCommandEvent& event );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
-
     /**
      * Return the project file parameter list for Eeschema.
      *
@@ -370,7 +368,6 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
-    void OnLeftClick( wxDC* aDC, const wxPoint& aPosition ) override;
     void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition ) override;
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
@@ -787,12 +784,6 @@ private:
     void OnMoveItem( wxCommandEvent& aEvent );
 
     /**
-     * Handle the #ID_SCH_ROTATE_CLOCKWISE and #ID_SCH_ROTATE_COUNTERCLOCKWISE events
-     * used to rotate schematic items and blocks.
-     */
-    void OnRotate( wxCommandEvent& aEvent );
-
-    /**
      * Handle the #ID_SCH_EDIT_ITEM event used to edit schematic items.
      */
     void OnEditItem( wxCommandEvent& aEvent );
@@ -927,7 +918,6 @@ private:
 
     // Text, label, glabel
     void EditSchematicText( SCH_TEXT* TextStruct );
-    void ChangeTextOrient( SCH_TEXT* aTextItem );
 
     /**
      * Command event handler to change a text type to another one.
@@ -951,9 +941,6 @@ private:
      */
     void DeleteConnection( bool DeleteFullConnection );
 
-    // Images:
-    void RotateImage( SCH_BITMAP* aItem );
-
     /**
      * Mirror a bitmap.
      *
@@ -972,17 +959,6 @@ private:
 
     // Hierarchical Sheet & PinSheet
     void        InstallHierarchyFrame( wxPoint& pos );
-
-    /**
-     * Rotate a sheet object.
-     *
-     * Sheets do not have a anchor point.  Because rotating it from its origin or its end is
-     * not friendly, the rotation is made around its center.
-     *
-     * @param aSheet the hierarchical sheet to rotate
-     * @param aRotCCW = true to rotate CCW, false to rotate CW
-     */
-    void RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW );
 
     /**
      * Mirror a hierarchical sheet.
@@ -1134,8 +1110,6 @@ private:
      */
     void EditComponentFieldText( SCH_FIELD* aField );
 
-    void RotateField( SCH_FIELD* aField );
-
     /**
      * Paste a list of items from the block stack.
      */
@@ -1237,8 +1211,6 @@ private:
     void addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction );
 
 public:
-    void Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
-
     /**
      * Initialize the parameters used by the block paste command.
      */
@@ -1316,6 +1288,12 @@ public:
      * @param aItem The item to swap with the current undo item.
      */
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
+
+    /**
+     * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel
+     * an in-progress operation.
+     */
+    void RollbackSchematicFromUndo();
 
     /**
      * Create a symbol library file with the name of the root document plus the '-cache' suffix,
