@@ -794,11 +794,6 @@ private:
     void SelectAllFromSheet( wxCommandEvent& aEvent );
 
     /**
-     * Handle the #ID_SCH_DRAG_ITEM event used to drag schematic items.
-     */
-    void OnDragItem( wxCommandEvent& aEvent );
-
-    /**
      * Handles the keyboard hotkey for unfolding a bus
      */
     void OnUnfoldBusHotkey( wxCommandEvent& event );
